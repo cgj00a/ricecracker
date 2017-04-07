@@ -58,7 +58,7 @@ namespace ricecracker
                             // auto replace tabs with 4 spaces
                             // todo: handle this properly...
                             fileContents[i] = fileContents[i].Replace("	", "    ");
-
+                            fileContents[i] = fileContents[i].TrimEnd(' ');
                             foreach (var regex in RegexDictionary)
                             {
                                 if (Regex.IsMatch(fileContents[i], regex.Key))
@@ -71,7 +71,7 @@ namespace ricecracker
                         {
                             File.WriteAllLines(file, fileContents);
                         }
-                        Debugger.Break();
+                        //Debugger.Break();
                     }
                 }
             }
@@ -88,11 +88,11 @@ namespace ricecracker
                 {
                     Config[arg] = Path.GetFullPath(val);
                 }
-                else if (arg == "i")
+                else if (arg == "i" || arg == "input")
                 {
                     Config[arg] = Path.GetFullPath(val);
                 }
-                else if (arg == "ext")
+                else if (arg == "ext" || arg == "e")
                 {
                     Config[arg] = val;
                 }

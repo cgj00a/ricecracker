@@ -7,20 +7,23 @@ $splitter=pattern=>replace
 # this shit is executed in order, so watch ur regex order yo
 
 # replace if(condition) with if condition
-(\s+)(if|else|elseif|do|while|for)\((.*)\)(.*) pattern=>replace $1$2 $3$4
+(\s+)(if|elseif|else|do|while|for)\((.*)\)(.*) pattern=>replace $1$2 $3$4
 # replace if (condition) with if condition
-(\s+)(if|else|elseif|do|while|for)\s+\((.*)\)(.*) pattern=>replace $1$2 $3$4
+(\s+)(if|elseif|else|do|while|for)\s+\((.*)\)(.*) pattern=>replace $1$2 $3$4
 # replace --comment with -- comment
 (\s+)--(\S+) pattern=>replace $1-- $2
 # newline block comments
 (\s+)--[[(.*)]] pattern=>replace $1--[[$1    $2$1    ]]
 # fuck == true
-(?:(\s+)|(.*))(\s+else|\s+elseif|\s+while|\s+and|\s+or|\s+if)(.*)==(?:\s+|)true(.*) pattern=>replace $1$2
+(?:(\s+)|(.*))(\s+elseif|\s+else|\s+while|\s+and|\s+or|\s+if)(.*)==(?:\s+|)true(.*) pattern=>replace $1$2$3$4$5
+(?:(\s+)|(.*))(\s+elseif|\s+else|\s+while|\s+and|\s+or|\s+if)(.*)~=(?:\s+|)nil(.*) pattern=>replace $1$2$3$4$5
 # fuck == false
-(?:(\s+)|(.*))(\s+else|\s+elseif|\s+while|\s+and|\s+or|\s+if)(.*)==(?:\s+|)false(.*) pattern=>replace $1$2 $3 not $4$5
+(?:(\s+)|(.*))(\s+elseif|\s+else|\s+while|\s+and|\s+or|\s+if)(.*)==(?:\s+|)(?:false|nil)(.*) pattern=>replace $1$2 $3 not$4$5
+(?:(\s+)|(.*))(\s+elseif|\s+else|\s+while|\s+and|\s+or|\s+if)(.*)~=(?:\s+|)true(.*) pattern=>replace $1$2 $3 not$4$5
+(?:(\s+)|(.*))(.*)==(?:\s+|)false(.*) pattern=>replace $1$2 not $3$4
 # replace : with . cause c#
-(.*)\:(.*) pattern=>replace $1.$2
-# replace camelCase c# methods with PascalCase
-(.*\.)([a-z])(\((.*)) pattern=>replace $1$2$3 -- todo: uppercase this method cause c# is fuckin shit
+(.*)\:(\w+) pattern=>replace $1.$2
+# todo: replace camelCase c# methods with PascalCase
+#(.*\.)([a-z])(.*(?!\.format|\.random)\(.*) pattern=>replace $1\U$2$3 -- todo: uppercase this method cause c# is fuckin shit
 
-# trim trailing space
+
